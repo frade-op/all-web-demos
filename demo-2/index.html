@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Demonstração de uma lista de tarefas local.">
+    <title>Lista de tarefas | Frade Op Demos</title>
+    <link rel="stylesheet" href="../styles.css">
+  </head>
+  <body class="app-page">
+    <main class="app-main">
+      <a class="back-link" href="../">← Todas as demonstrações</a>
+      <section class="app-panel">
+        <p class="demo-number">DEMO 02</p>
+        <h1>Lista de tarefas</h1>
+        <p class="app-description">Adicione tarefas e marque-as quando concluir. Os dados ficam salvos neste navegador.</p>
+        <form class="task-form" id="task-form">
+          <label class="visually-hidden" for="task-input">Nova tarefa</label>
+          <input id="task-input" name="task" type="text" maxlength="120" placeholder="O que você precisa fazer?" required>
+          <button class="primary" type="submit">Adicionar</button>
+        </form>
+        <ul class="task-list" id="task-list" aria-label="Tarefas"></ul>
+        <p class="empty-state" id="empty-state">Nenhuma tarefa ainda. Adicione a primeira!</p>
+      </section>
+    </main>
+    <script>
+      const storageKey = "frade-op-demo-2-tasks";
+      const form = document.querySelector("#task-form");
+      const input = document.querySelector("#task-input");
+      const list = document.querySelector("#task-list");
+      const emptyState = document.querySelector("#empty-state");
+      let tasks = JSON.parse(localStorage.getItem(storageKey) || "[]");
+
+      function saveTasks() {
+        localStorage.setItem(storageKey, JSON.stringify(tasks));
+      }
+
+      function renderTasks() {
+        list.replaceChildren();
+        emptyState.hidden = tasks.length > 0;
+
+        tasks.forEach((task) => {
+          const item = document.createElement("li");
+          const checkbox = document.createElement("input");
+          const label = document.createElement("span");
+          const removeButton = document.createElement("button");
+
+          checkbox.type = "checkbox";
+          checkbox.checked = task.completed;
+          checkbox.setAttribute("aria-label", `Concluir: ${task.text}`);
+          checkbox.addEventListener("change", () => {
+            task.completed = checkbox.checked;
+            saveTasks();
+            renderTasks();
+          });
+
+          label.textContent = task.text;
+
+          removeButton.type = "button";
+          removeButton.className = "remove-task";
+          removeButton.textContent = "Remover";
+          removeButton.setAttribute("aria-label", `Remover: ${task.text}`);
+          removeButton.addEventListener("click", () => {
+            tasks = tasks.filter((entry) => entry.id !== task.id);
+            saveTasks();
+            renderTasks();
+          });
+
+          if (task.completed) item.classList.add("completed");
+          item.append(checkbox, label, removeButton);
+          list.append(item);
+        });
+      }
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const text = input.value.trim();
+        if (!text) return;
+
+        tasks.push({ id: crypto.randomUUID(), text, completed: false });
+        saveTasks();
+        renderTasks();
+        form.reset();
+        input.focus();
+      });
+
+      renderTasks();
+    </script>
+  </body>
+</html>

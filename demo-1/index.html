@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Demonstração interativa de um contador.">
+    <title>Contador | Frade Op Demos</title>
+    <link rel="stylesheet" href="../styles.css">
+  </head>
+  <body class="app-page">
+    <main class="app-main">
+      <a class="back-link" href="../">← Todas as demonstrações</a>
+      <section class="app-panel">
+        <p class="demo-number">DEMO 01</p>
+        <h1>Contador</h1>
+        <p class="app-description">Use os controles para incrementar, decrementar ou reiniciar o valor.</p>
+        <output class="counter" id="count" aria-live="polite">0</output>
+        <div class="button-row">
+          <button type="button" id="decrement">Diminuir</button>
+          <button type="button" class="primary" id="increment">Aumentar</button>
+          <button type="button" id="reset">Reiniciar</button>
+        </div>
+      </section>
+    </main>
+    <script>
+      const countOutput = document.querySelector("#count");
+      let count = 0;
+
+      function renderCount() {
+        countOutput.textContent = String(count);
+      }
+
+      document.querySelector("#increment").addEventListener("click", () => {
+        count += 1;
+        renderCount();
+      });
+
+      document.querySelector("#decrement").addEventListener("click", () => {
+        count -= 1;
+        renderCount();
+      });
+
+      document.querySelector("#reset").addEventListener("click", () => {
+        count = 0;
+        renderCount();
+      });
+    </script>
+  </body>
+</html>
