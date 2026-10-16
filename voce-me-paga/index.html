@@ -91,6 +91,10 @@
           <div>
             <h2 id="lookup-title" data-i18n="lookup.title">Consultar nota fiscal</h2>
             <p class="section-description" data-i18n="lookup.description">Adicione os links das notas que fazem parte da compra.</p>
+            <p class="section-description" data-i18n="lookup.coverage">
+              A consulta automática está validada para NFC-e do RS. Queremos superar as diferenças entre portais
+              com segurança e ampliar a leitura para mais estados e formatos de NFC-e.
+            </p>
           </div>
         </summary>
 
@@ -151,6 +155,7 @@
             <tfoot id="combined-totals"></tfoot>
           </table>
         </div>
+        <nav id="combined-pagination" class="pagination" aria-label="Paginação" data-i18n-attr="aria-label:pagination.label" hidden></nav>
 
         <p id="items-status" class="participant-status" role="status" aria-live="polite"></p>
         <form id="manual-item-form" class="manual-item-form">
@@ -219,6 +224,10 @@
         <form id="assignment-form" method="dialog">
           <h2 id="assignment-title" data-i18n="assign.title">Editar divisão</h2>
           <p id="assignment-description" class="section-description"></p>
+          <div id="assignment-bulk" class="assignment-bulk">
+            <button type="button" class="secondary-button" data-select-all="true" data-i18n="assign.selectAll">Selecionar todos</button>
+            <button type="button" class="secondary-button" data-select-all="false" data-i18n="assign.deselectAll">Desmarcar todos</button>
+          </div>
           <div
             id="assignment-options"
             class="assignment-options"
