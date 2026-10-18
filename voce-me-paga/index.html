@@ -37,17 +37,45 @@
         />
       </header>
 
-      <details class="participants-card collapsible-card" open aria-labelledby="participants-title">
-        <summary class="section-heading collapsible-heading">
+      <nav class="stepper" aria-label="Passos" data-i18n-attr="aria-label:steps.label">
+        <ol>
+          <li>
+            <button type="button" class="step-button" data-step="participants">
+              <span class="step-label" data-i18n="steps.participants">Pagantes</span>
+              <span class="step-badge" data-badge="participants" hidden></span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="step-button" data-step="invoices">
+              <span class="step-label" data-i18n="steps.invoices">Notas</span>
+              <span class="step-badge" data-badge="invoices" hidden></span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="step-button" data-step="history">
+              <span class="step-label" data-i18n="steps.history">Histórico</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="step-button" data-step="result">
+              <span class="step-label" data-i18n="steps.result">Resultado</span>
+            </button>
+          </li>
+        </ol>
+      </nav>
+
+      <section class="step-panel" id="step-participants" data-step-panel="participants">
+      <div class="participants-card" aria-labelledby="participants-title">
+        <div class="section-heading">
           <div>
             <h2 id="participants-title" data-i18n="participants.title">Quem vai participar?</h2>
             <p class="section-description" data-i18n="participants.description">
               Cadastre, edite ou remova pagantes antes ou depois de consultar a nota.
             </p>
           </div>
-        </summary>
+        </div>
 
-        <div class="collapsible-content">
+        <div>
           <form id="participant-form">
             <label class="visually-hidden" for="participant-first-name" data-i18n="participants.firstName">Nome</label>
             <input
@@ -84,10 +112,15 @@
             data-i18n-attr="aria-label:participants.listLabel"
           ></ul>
         </div>
-      </details>
+      </div>
+      <div class="step-nav">
+        <button type="button" data-step-next data-i18n="steps.next">Próximo passo</button>
+      </div>
+      </section>
 
-      <details class="lookup-card collapsible-card" open aria-labelledby="lookup-title">
-        <summary class="section-heading collapsible-heading">
+      <section class="step-panel" id="step-invoices" data-step-panel="invoices" hidden>
+      <div class="lookup-card" aria-labelledby="lookup-title">
+        <div class="section-heading">
           <div>
             <h2 id="lookup-title" data-i18n="lookup.title">Consultar nota fiscal</h2>
             <p class="section-description" data-i18n="lookup.description">Adicione os links das notas que fazem parte da compra.</p>
@@ -96,9 +129,9 @@
               com segurança e ampliar a leitura para mais estados e formatos de NFC-e.
             </p>
           </div>
-        </summary>
+        </div>
 
-        <div class="collapsible-content">
+        <div>
           <form id="invoice-form">
             <button
               id="scan-qr-btn"
@@ -126,8 +159,48 @@
 
           <p id="status" role="status" aria-live="polite" hidden></p>
         </div>
-      </details>
+      </div>
 
+      <div id="result" class="result-card invoices-card" aria-label="Notas da compra" data-i18n-attr="aria-label:invoices.title">
+        <div class="section-heading">
+          <div>
+            <h2 data-i18n="invoices.title">Notas da compra</h2>
+            <p class="section-description" data-i18n="invoices.description">Abra cada nota para conferir os itens importados.</p>
+          </div>
+        </div>
+        <p id="invoices-empty" class="empty-state" data-i18n="invoices.empty">As notas adicionadas aparecerão aqui.</p>
+        <div id="invoices-list" class="invoices-list"></div>
+      </div>
+      <div class="step-nav">
+        <button type="button" class="secondary-button" data-step-prev data-i18n="steps.previous">Passo anterior</button>
+        <button type="button" data-step-next data-i18n="steps.next">Próximo passo</button>
+      </div>
+      </section>
+
+      <section class="step-panel" id="step-history" data-step-panel="history" hidden>
+      <div class="result-card history-card" aria-labelledby="history-title">
+        <div class="section-heading">
+          <div>
+            <h2 id="history-title" data-i18n="history.title">Histórico</h2>
+            <p class="section-description" data-i18n="history.description">Tudo o que foi feito nesta compra.</p>
+          </div>
+        </div>
+        <div id="history-filters" class="history-filters" role="group" aria-label="Filtrar histórico" data-i18n-attr="aria-label:history.filterLabel">
+          <button type="button" class="filter-button" data-filter="all" data-i18n="history.all">Todos</button>
+          <button type="button" class="filter-button" data-filter="participants" data-i18n="history.participants">Usuários</button>
+          <button type="button" class="filter-button" data-filter="invoices" data-i18n="history.invoices">Notas</button>
+          <button type="button" class="filter-button" data-filter="products" data-i18n="history.products">Produtos relacionados</button>
+        </div>
+        <p id="history-empty" class="empty-state" data-i18n="history.empty">Nenhuma atividade registrada.</p>
+        <ol id="history-list" class="history-list"></ol>
+      </div>
+      <div class="step-nav">
+        <button type="button" class="secondary-button" data-step-prev data-i18n="steps.previous">Passo anterior</button>
+        <button type="button" data-step-next data-i18n="steps.next">Próximo passo</button>
+      </div>
+      </section>
+
+      <section class="step-panel" id="step-result" data-step-panel="result" hidden>
       <section class="result-card combined-items" aria-labelledby="combined-items-title">
         <div class="section-heading combined-heading">
           <div>
@@ -171,17 +244,6 @@
         </form>
       </section>
 
-      <section id="result" class="result-card invoices-card" aria-label="Notas da compra" data-i18n-attr="aria-label:invoices.title">
-        <div class="section-heading">
-          <div>
-            <h2 data-i18n="invoices.title">Notas da compra</h2>
-            <p class="section-description" data-i18n="invoices.description">Abra cada nota para conferir os itens importados.</p>
-          </div>
-        </div>
-        <p id="invoices-empty" class="empty-state" data-i18n="invoices.empty">As notas adicionadas aparecerão aqui.</p>
-        <div id="invoices-list" class="invoices-list"></div>
-      </section>
-
       <section class="result-card export-card" aria-labelledby="export-title">
         <div class="section-heading">
           <div>
@@ -198,6 +260,10 @@
           <button type="submit" data-i18n="export.button">Exportar resumo</button>
         </form>
         <p id="export-status" class="participant-status" role="status" aria-live="polite"></p>
+      </section>
+      <div class="step-nav">
+        <button type="button" class="secondary-button" data-step-prev data-i18n="steps.previous">Passo anterior</button>
+      </div>
       </section>
 
       <dialog id="item-edit-dialog" aria-labelledby="item-edit-title">

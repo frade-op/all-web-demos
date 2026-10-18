@@ -1,5 +1,6 @@
 import { InvoiceBook, sortItems } from "./domain/invoices.mjs";
 import { ParticipantRoster } from "./domain/participants.mjs";
+import { ActivityHistory } from "./domain/history.mjs";
 import { ItemShares } from "./domain/shares.mjs";
 import { extractInvoiceUrl, isCameraContextSecure } from "./domain/qr.mjs";
 import { EXPORT_FORMATS, buildSummary, summaryFileName } from "./export.mjs";
@@ -61,6 +62,90 @@ let editingParticipantId = null;
 let assignmentTarget = null;
 
 const money = (value) => (value == null ? "-" : currency.format(Number(value)));
+
+const STEPS = ["participants", "invoices", "history", "result"];
+const history = new ActivityHistory();
+let currentStep = STEPS[0];
+let historyFilter = "all";
+const historyListEl = document.getElementById("history-list");
+const historyEmptyEl = document.getElementById("history-empty");
+
+function logActivity(category, key, params) {
+  history.add(category, key, params);
+  renderHistory();
+}
+
+function renderHistory() {
+  const entries = history.list(historyFilter);
+  const rows = entries.map((entry) => {
+    const row = document.createElement("li");
+    row.className = `history-entry history-${entry.category}`;
+    const time = document.createElement("time");
+    time.dateTime = entry.at.toISOString();
+    time.textContent = entry.at.toLocaleTimeString(LOCALES[language], {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+    const text = document.createElement("span");
+    const params = { ...entry.params };
+    if (params.count != null) params.itemLabel = countLabel(params.count);
+    text.textContent = t(entry.key, params);
+    row.append(time, text);
+    return row;
+  });
+  historyListEl.replaceChildren(...rows);
+  historyEmptyEl.hidden = rows.length > 0;
+  for (const button of document.querySelectorAll("#history-filters [data-filter]")) {
+    button.setAttribute("aria-pressed", String(button.dataset.filter === historyFilter));
+  }
+}
+
+function updateStepBadges() {
+  const counts = {
+    participants: participants.list().length,
+    invoices: invoiceBook.listInvoices().length,
+  };
+  for (const badge of document.querySelectorAll("[data-badge]")) {
+    const count = counts[badge.dataset.badge];
+    badge.hidden = currentStep === badge.dataset.badge || !count;
+    badge.textContent = String(count);
+    badge.title = t("steps.badge", { count });
+  }
+}
+
+function goToStep(step) {
+  if (!STEPS.includes(step)) return;
+  currentStep = step;
+  for (const panel of document.querySelectorAll("[data-step-panel]")) {
+    panel.hidden = panel.dataset.stepPanel !== step;
+  }
+  for (const button of document.querySelectorAll(".step-button")) {
+    if (button.dataset.step === step) button.setAttribute("aria-current", "step");
+    else button.removeAttribute("aria-current");
+  }
+  updateStepBadges();
+}
+
+document.querySelector(".stepper").addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-step]");
+  if (button) goToStep(button.dataset.step);
+});
+
+for (const button of document.querySelectorAll("[data-step-next], [data-step-prev]")) {
+  button.addEventListener("click", () => {
+    const offset = "stepNext" in button.dataset ? 1 : -1;
+    goToStep(STEPS[STEPS.indexOf(currentStep) + offset]);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+}
+
+document.getElementById("history-filters").addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-filter]");
+  if (!button) return;
+  historyFilter = button.dataset.filter;
+  renderHistory();
+});
 
 function setParticipantStatus(message, isError = false) {
   participantStatusEl.textContent = message;
@@ -224,6 +309,7 @@ function renderParticipants(focusEditingInput = false) {
 
   participantsListEl.replaceChildren(...rows);
   participantsEmptyEl.hidden = rows.length > 0;
+  updateStepBadges();
 }
 
 participantForm.addEventListener("submit", (event) => {
@@ -235,6 +321,7 @@ participantForm.addEventListener("submit", (event) => {
     );
     participantForm.reset();
     setParticipantStatus(t("participants.added", { name: participant.name }));
+    logActivity("participants", "history.participantAdded", { name: participant.name });
     renderParticipants();
     renderInvoiceBook();
     participantFirstNameInput.focus();
@@ -275,6 +362,7 @@ participantsListEl.addEventListener("click", (event) => {
       shares.removeParticipant(participantId);
       editingParticipantId = null;
       setParticipantStatus(t("participants.removed", { name: participant.name }));
+      logActivity("participants", "history.participantRemoved", { name: participant.name });
       renderParticipants();
       renderInvoiceBook();
     } catch (error) {
@@ -298,6 +386,7 @@ participantsListEl.addEventListener("submit", (event) => {
     );
     editingParticipantId = null;
     setParticipantStatus(t("participants.updated", { name: participant.name }));
+    logActivity("participants", "history.participantRenamed", { name: participant.name });
     renderParticipants();
     renderInvoiceBook();
   } catch (error) {
@@ -619,6 +708,7 @@ function renderInvoiceBook() {
     createTableHead(true, true, getVisibleColumns(), "combined")
   );
   updateColumnVisibility();
+  updateStepBadges();
 }
 
 function createTableHead(
@@ -698,6 +788,10 @@ form.addEventListener("submit", async (event) => {
     renderInvoiceBook();
     renderParticipants();
     form.reset();
+    logActivity("invoices", "history.invoiceAdded", {
+      number: invoice.number,
+      count: invoice.products.length,
+    });
     const noParticipantsNotice = participants.list().length ? "" : t("lookup.noParticipants");
     setStatus(
       t("lookup.added", {
@@ -852,6 +946,7 @@ manualItemForm.addEventListener("submit", (event) => {
     renderInvoiceBook();
     renderParticipants();
     itemsStatusEl.textContent = t("items.manualAdded", { name: item.name });
+    logActivity("products", "history.itemAdded", { name: item.name });
     itemsStatusEl.classList.remove("error");
     manualItemForm.elements.namedItem("name").focus();
   } catch (error) {
@@ -959,6 +1054,8 @@ assignmentForm.addEventListener("submit", (event) => {
         participants.list().map(({ id }) => id)
       );
       itemsStatusEl.textContent = t("assign.itemUpdated");
+      const assignedItem = invoiceBook.listItems().find(({ id }) => id === assignmentTarget.itemId);
+      logActivity("products", "history.itemSplit", { name: assignedItem?.name ?? "" });
     } else {
       const participant = participants
         .list()
@@ -969,6 +1066,7 @@ assignmentForm.addEventListener("submit", (event) => {
         participants.list().map(({ id }) => id)
       );
       itemsStatusEl.textContent = t("assign.participantUpdated", { name: participant.name });
+      logActivity("products", "history.participantItemsSplit", { name: participant.name });
     }
     itemsStatusEl.classList.remove("error");
     assignmentDialog.close();
@@ -1033,6 +1131,7 @@ function handleItemAction(event) {
     renderInvoiceBook();
     renderParticipants();
     itemsStatusEl.textContent = t("items.removed", { name: item.name });
+    logActivity("products", "history.itemRemoved", { name: item.name });
     itemsStatusEl.classList.remove("error");
   } catch (error) {
     itemsStatusEl.textContent = errorText(error);
@@ -1055,6 +1154,7 @@ itemEditForm.addEventListener("submit", (event) => {
     renderInvoiceBook();
     renderParticipants();
     itemsStatusEl.textContent = t("items.updated", { name: item.name });
+    logActivity("products", "history.itemUpdated", { name: item.name });
     itemsStatusEl.classList.remove("error");
   } catch (error) {
     itemsStatusEl.textContent = errorText(error);
@@ -1153,6 +1253,7 @@ function setLanguage(next) {
   statusEl.hidden = true;
   renderParticipants();
   renderInvoiceBook();
+  renderHistory();
 }
 
 document.querySelector(".lang-switch").addEventListener("click", (event) => {
@@ -1163,3 +1264,5 @@ document.querySelector(".lang-switch").addEventListener("click", (event) => {
 applyTranslations();
 renderParticipants();
 renderInvoiceBook();
+renderHistory();
+goToStep(STEPS[0]);
