@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#111111">
+    <meta
+      name="description"
+      content="Portal beta do aluno RT Fitness: pagamentos e frequência."
+    >
+    <title>RT Fitness | Portal do aluno</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navegação principal">
+        <a class="brand" href="#inicio" aria-label="RT Fitness, início">
+          <span class="brand-mark">RT</span>
+          <span class="brand-name">FITNESS</span>
+        </a>
+
+        <p class="sidebar-label">MENU</p>
+        <nav class="main-nav">
+          <button class="nav-link is-active" type="button" data-screen="overview" aria-current="page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>
+            <span>Visão geral</span>
+          </button>
+          <button class="nav-link" type="button" data-screen="payments">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 10h18M7 15h4"></path></svg>
+            <span>Pagamentos</span>
+          </button>
+          <button class="nav-link" type="button" data-screen="attendance">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5m0 14h17M8 15l3-4 3 2 5-7"></path><path d="M16 6h3v3"></path></svg>
+            <span>Frequência</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <span class="beta-pill"><span></span> VERSÃO BETA</span>
+          <p>Seu melhor começa aqui.</p>
+        </div>
+      </aside>
+
+      <div class="main-column">
+        <header class="topbar">
+          <div class="mobile-brand" aria-label="RT Fitness">
+            <span class="brand-mark">RT</span>
+            <span class="brand-name">FITNESS</span>
+          </div>
+          <div class="topbar-spacer"></div>
+          <span class="topbar-unit"><span class="status-dot"></span> Unidade Nestor</span>
+          <div class="topbar-divider"></div>
+          <div class="profile">
+            <div class="avatar" aria-hidden="true">CD</div>
+            <div class="profile-copy">
+              <strong>Camila Duarte</strong>
+              <span>Aluna desde 2024</span>
+            </div>
+            <span class="profile-chevron" aria-hidden="true">⌄</span>
+          </div>
+        </header>
+
+        <main id="inicio" class="main-content">
+          <section class="screen is-visible" id="screen-overview" aria-labelledby="overview-title">
+            <div class="page-heading">
+              <div>
+                <p class="eyebrow">QUARTA-FEIRA, 28 DE OUTUBRO</p>
+                <h1 id="overview-title">Olá, Camila <span class="wave" aria-hidden="true">✦</span></h1>
+                <p class="page-subtitle">Acompanhe sua rotina na RT Fitness.</p>
+              </div>
+              <span class="member-id">MATRÍCULA <strong>#08421</strong></span>
+            </div>
+
+            <div class="overview-grid">
+              <article class="payment-feature">
+                <div class="feature-topline">
+                  <span class="feature-label">SITUAÇÃO DO PLANO</span>
+                  <span class="active-badge"><span></span> PLANO ATIVO</span>
+                </div>
+                <div class="payment-feature-content">
+                  <div>
+                    <p class="plan-name">Musculação + Funcional</p>
+                    <p class="payment-caption">Próximo vencimento</p>
+                    <p class="due-date">05 <span>NOV</span> <small>2026</small></p>
+                  </div>
+                  <div class="payment-icon" aria-hidden="true">
+                    <svg viewBox="0 0 64 64"><rect x="9" y="16" width="46" height="34" rx="5"></rect><path d="M9 27h46M18 39h12"></path><path d="m43 38 4 4 8-9"></path></svg>
+                  </div>
+                </div>
+                <div class="feature-footer">
+                  <span>Último pagamento</span>
+                  <strong>05 out 2026 <i>·</i> R$ 119,90</strong>
+                </div>
+                <button class="text-link light-link" type="button" data-go="payments">
+                  Ver histórico de pagamentos <span aria-hidden="true">→</span>
+                </button>
+              </article>
+
+              <article class="attendance-feature">
+                <div class="card-heading">
+                  <div>
+                    <p class="eyebrow">SEU RITMO</p>
+                    <h2>Frequência</h2>
+                  </div>
+                  <span class="chart-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M4 19V5m0 14h17M8 15l3-4 3 2 5-7"></path></svg>
+                  </span>
+                </div>
+                <p class="attendance-count"><strong>12</strong><span>treinos em outubro</span></p>
+                <div class="week-bars" aria-label="Frequência semanal ilustrativa">
+                  <span class="bar-item"><i style="--bar-height: 28%"></i><small>SEG</small></span>
+                  <span class="bar-item"><i style="--bar-height: 72%"></i><small>TER</small></span>
+                  <span class="bar-item"><i style="--bar-height: 46%"></i><small>QUA</small></span>
+                  <span class="bar-item"><i style="--bar-height: 84%"></i><small>QUI</small></span>
+                  <span class="bar-item"><i style="--bar-height: 58%"></i><small>SEX</small></span>
+                  <span class="bar-item"><i style="--bar-height: 22%"></i><small>SÁB</small></span>
+                  <span class="bar-item"><i style="--bar-height: 12%"></i><small>DOM</small></span>
+                </div>
+                <button class="text-link" type="button" data-go="attendance">
+                  Ver histórico de treinos <span aria-hidden="true">→</span>
+                </button>
+              </article>
+            </div>
+
+            <section class="recent-section" aria-labelledby="recent-title">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">ACOMPANHE SUA ROTINA</p>
+                  <h2 id="recent-title">Treinos recentes</h2>
+                </div>
+                <button class="text-link" type="button" data-go="attendance">
+                  Ver todos <span aria-hidden="true">→</span>
+                </button>
+              </div>
+              <div class="checkin-list compact-list" id="overview-checkins"></div>
+            </section>
+          </section>
+
+          <section class="screen" id="screen-payments" aria-labelledby="payments-title" hidden>
+            <div class="page-heading">
+              <div>
+                <p class="eyebrow">SUA CONTA</p>
+                <h1 id="payments-title">Pagamentos</h1>
+                <p class="page-subtitle">Consulte o status do plano e seus pagamentos.</p>
+              </div>
+            </div>
+            <article class="payment-summary">
+              <div class="summary-status"><span class="active-badge"><span></span> EM DIA</span></div>
+              <div class="summary-grid">
+                <div>
+                  <span class="detail-label">PLANO</span>
+                  <strong>Musculação + Funcional</strong>
+                </div>
+                <div>
+                  <span class="detail-label">PRÓXIMO VENCIMENTO</span>
+                  <strong>05 de novembro de 2026</strong>
+                </div>
+                <div>
+                  <span class="detail-label">ÚLTIMO PAGAMENTO</span>
+                  <strong>05 de outubro de 2026</strong>
+                </div>
+                <div>
+                  <span class="detail-label">VALOR MENSAL</span>
+                  <strong>R$ 119,90</strong>
+                </div>
+              </div>
+              <p class="demo-note">Informações demonstrativas. Consulte a recepção para confirmar seus dados.</p>
+            </article>
+
+            <section class="history-section" aria-labelledby="payment-history-title">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">MOVIMENTAÇÕES</p>
+                  <h2 id="payment-history-title">Histórico de pagamentos</h2>
+                </div>
+                <span class="record-count">5 registros</span>
+              </div>
+              <div class="table-wrap">
+                <table class="payment-table">
+                  <thead>
+                    <tr><th scope="col">REFERÊNCIA</th><th scope="col">DATA DO PAGAMENTO</th><th scope="col">VALOR</th><th scope="col">STATUS</th></tr>
+                  </thead>
+                  <tbody id="payment-history"></tbody>
+                </table>
+              </div>
+            </section>
+          </section>
+
+          <section class="screen" id="screen-attendance" aria-labelledby="attendance-title" hidden>
+            <div class="page-heading">
+              <div>
+                <p class="eyebrow">SUA ROTINA</p>
+                <h1 id="attendance-title">Frequência</h1>
+                <p class="page-subtitle">Veja quando e onde você treinou.</p>
+              </div>
+            </div>
+            <div class="attendance-stats">
+              <article class="stat-card">
+                <span class="stat-icon yellow-icon" aria-hidden="true">↗</span>
+                <div><strong>12</strong><span>treinos em outubro</span></div>
+              </article>
+              <article class="stat-card">
+                <span class="stat-icon dark-icon" aria-hidden="true">◷</span>
+                <div><strong>18:42</strong><span>horário do último treino</span></div>
+              </article>
+              <article class="stat-card">
+                <span class="stat-icon pale-icon" aria-hidden="true">⌖</span>
+                <div><strong>Nestor</strong><span>unidade mais visitada</span></div>
+              </article>
+            </div>
+            <section class="history-section" aria-labelledby="checkin-history-title">
+              <div class="section-heading history-heading">
+                <div>
+                  <p class="eyebrow">ENTRADAS REGISTRADAS</p>
+                  <h2 id="checkin-history-title">Histórico de treinos</h2>
+                </div>
+                <label class="filter-label" for="unit-filter">
+                  <span>Unidade</span>
+                  <select id="unit-filter">
+                    <option value="all">Todas as unidades</option>
+                    <option value="Nestor">Nestor</option>
+                    <option value="Jardim dos Lagos">Jardim dos Lagos</option>
+                    <option value="Ermo">Ermo</option>
+                  </select>
+                </label>
+              </div>
+              <div class="checkin-list full-list" id="attendance-checkins"></div>
+              <p class="empty-state" id="empty-checkins" hidden>Nenhum treino encontrado nesta unidade.</p>
+            </section>
+          </section>
+        </main>
+
+        <footer class="page-footer">
+          <span>RT FITNESS <i>·</i> PORTAL DO ALUNO</span>
+          <span>Versão beta para demonstração</span>
+        </footer>
+      </div>
+    </div>
+    <nav class="mobile-nav" aria-label="Navegação móvel">
+      <button class="nav-link is-active" type="button" data-screen="overview" aria-current="page">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>
+        <span>Início</span>
+      </button>
+      <button class="nav-link" type="button" data-screen="payments">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 10h18M7 15h4"></path></svg>
+        <span>Pagamentos</span>
+      </button>
+      <button class="nav-link" type="button" data-screen="attendance">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5m0 14h17M8 15l3-4 3 2 5-7"></path><path d="M16 6h3v3"></path></svg>
+        <span>Frequência</span>
+      </button>
+    </nav>
+  </body>
+</html>
