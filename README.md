@@ -7,6 +7,7 @@ Portal estático para publicar aplicações de demonstração, com uma rota inde
 - `/` — catálogo das demonstrações.
 - `/demo-1/` — exemplo de contador interativo.
 - `/demo-2/` — exemplo de lista de tarefas, com dados guardados no navegador.
+- `/legacy-to-new-demo/` — jornada visual de modernização gradual do legado a microfrontends.
 
 Cada rota corresponde a uma pasta com um `index.html`. Para adicionar outra demo, crie, por exemplo, `minha-demo/index.html`; ela ficará disponível em `/minha-demo/`. Adicione um cartão para ela em `index.html` para que apareça no catálogo.
 
